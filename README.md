@@ -1,2 +1,6 @@
 # Canvas-Magic
-Use Canvas to do 2D special effects and games
+Use Canvas to do 2D special effects and games.
+
+Up to now, implemented effects as blow:
+## 1 - particles
+![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
