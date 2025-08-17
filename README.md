@@ -3,4 +3,4 @@ Use Canvas to do 2D special effects and games.
 
 Up to now, implemented effects as blow:
 ## 1 - particles
-<img src="./canvas/1-particles/particles.gif" width="40" height="40" />
+<img src="canvas/1-particles/particles.gif" width="40" height="40" />
