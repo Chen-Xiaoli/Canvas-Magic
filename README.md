@@ -10,3 +10,10 @@ Special particles effects when mouse click or move, particles will be generated 
 ## 2 - Special matrix rain like haker attack
 Matirx rain effects, with canvas linear gradient.
 <img src="canvas/2-codeRain/CodeRain.gif" width="800" height="800" />
+
+## 3 - Sprite dog animation
+Sprite dog animation implemented, with canvas drawImage.
+How to get a image and insert into a frame, is important for this animation.
+<video controls autoplay>
+  <source src="/canvas/3-spriteAnimation/SpriteAnimation.mp4" type="video/mp4" width="800" height="800" />
+<video/>
