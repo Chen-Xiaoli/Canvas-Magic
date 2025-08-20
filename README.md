@@ -16,6 +16,6 @@ Sprite dog animation implemented, with canvas drawImage.
 How to get a image and insert into a frame, is important for this animation.
 
 ## 4 - Parallax background animation
-Parallax background can animate align at x coordiate, make x is negative to implement background move. How to remove gap between frames, is the important.
+<div>Parallax background can animate align at x coordiate, make x is negative to implement background move. How to remove gap between frames, is the important.</div>
 <img src="canvas/4-parallaxAnimation/parallaxAnimation.png" width="800" height="800" />
 
