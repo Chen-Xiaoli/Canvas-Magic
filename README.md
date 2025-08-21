@@ -19,6 +19,6 @@ How to get a image and insert into a frame, is important for this animation.
 <div>Parallax background can animate align at x coordiate, make x is negative to implement background move. How to remove gap between frames, is the important.</div>
 <img src="canvas/4-parallaxAnimation/parallaxAnimation.png" width="800" height="800" />
 
-##5 - Flying creatures 
+## 5 - Flying creatures 
 Flying creature implemented with different animate path.
 
