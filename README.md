@@ -24,5 +24,5 @@ Flying creature implemented with different animate path.
 
 ## 6 - Game Tutorials 1 - Wolf Escape
 With Parallax backgound, sprite animation, keyboard input handler and circle collision detection to implement a simple game.
-
+<img src="canvas/6-sideScroller/result.png" width="800" height="800" />
 
