@@ -9,9 +9,49 @@ window.addEventListener('load', function () {
     let score = 0;
     let gameOver = false;
 
+    let restartBtn = document.getElementById('restartBtn');
+    restartBtn.addEventListener('click', restartGame);
+
+    let isFullscreen = false;
+
+    const gameContainer = document.getElementById("gameContainer");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+    fullscreenBtn.addEventListener("click", () => {
+        if (gameContainer.requestFullscreen && !isFullscreen) {
+            gameContainer.requestFullscreen();
+            isFullscreen = true;
+            fullscreenBtn.textContent  = 'Exit Fullscreen';
+        } else if (gameContainer.webkitRequestFullscreen && !isFullscreen) {
+            gameContainer.webkitRequestFullscreen();
+            isFullscreen = true;
+            fullscreenBtn.textContent  = 'Exit Fullscreen';
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+            isFullscreen = false;
+            fullscreenBtn.textContent  = 'Enter Fullscreen';
+        }
+    });
+
+    function restartGame() {
+        enemies = [];
+        score = 0;
+        gameOver = false;
+        player.x = player.width / 2;
+        restartBtn.style.display = 'none';
+        animate(0);
+    }
+
     class InputHandler {
         constructor() {
             this.keys = [];
+            this.touchStartY = '';
+            this.touchStartX = '';
+            this.touchThreshold = 30;   
             window.addEventListener('keydown', (e) => {
                 e.preventDefault();
                 if ((e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') && this.keys.indexOf(e.key) === -1) {
@@ -24,7 +64,56 @@ window.addEventListener('load', function () {
                     this.keys.splice(this.keys.indexOf(e.key), 1);
                 }
             });
-           
+
+            window.addEventListener('touchstart', (e) => {
+                this.touchStartY =  e.touches[0].pageY;
+                this.touchStartX =  e.touches[0].pageX;
+            });
+
+            window.addEventListener('touchmove', (e) => {
+
+                const touchY = e.touches[0].pageY;
+                const touchX = e.touches[0].pageX;
+                const distanceY = touchY - this.touchStartY;
+                const distanceX = touchX - this.touchStartX;
+
+                if (- distanceY > this.touchThreshold) {
+                    if (this.keys.indexOf('TouchUp') === -1) {
+                        this.keys.push('TouchUp');
+                    }
+                } else if (distanceY > this.touchThreshold) {
+                    if (this.keys.indexOf('TouchDown') === -1) {
+                        this.keys.push('TouchDown');
+                    }
+                } 
+
+                if (distanceX > this.touchThreshold) {
+                    if (this.keys.indexOf('TouchRight') === -1) {
+                        this.keys.push('TouchRight');
+                    }
+                } else if (-distanceX > this.touchThreshold) {
+                    if (this.keys.indexOf('TouchLeft') === -1) {
+                        this.keys.push('TouchLeft');
+                    }
+                }
+                console.log(this.keys);
+            });
+
+            window.addEventListener('touchend', (e) => {
+               
+                if (this.keys.indexOf('TouchUp') > -1) {
+                    this.keys.splice(this.keys.indexOf('TouchUp'), 1);
+                }
+                if (this.keys.indexOf('TouchDown') > -1) {
+                    this.keys.splice(this.keys.indexOf('TouchDown'), 1);
+                }
+                if (this.keys.indexOf('TouchRight') > -1) {
+                    this.keys.splice(this.keys.indexOf('TouchRight'), 1);
+                }
+                if (this.keys.indexOf('TouchLeft') > -1) {
+                    this.keys.splice(this.keys.indexOf('TouchLeft'), 1);
+                }
+            });
         }
     }
 
@@ -36,28 +125,30 @@ window.addEventListener('load', function () {
             this.height = 100;
             this.spriteWidth = 575;
             this.spriteHeight = 523;
-            this.x = 0;
+            this.x = this.width / 2;
             this.y = this.gameHeight - this.height;
             this.image = document.getElementById('playerImg');
             this.frameX = 0;
             this.frameY = 3;
             this.speed = 0;
             this.vy = 0;
-            this.weight = 1;
+            this.weight = 0.5;
             this.staggerFrame = 5;
             this.spriteColumns = 9;
+            this.heightThreshold = 20;
         }
 
         draw(context) {
-            context.strokeStyle = 'white'; 
-            context.strokeRect(this.x, this.y, this.width, this.height);
             context.beginPath();
-            context.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+            context.strokeStyle = 'white'; 
+            context.arc(this.x + this.width / 2, this.y + this.height / 2 + 10, this.width / 2.5, 0, Math.PI * 2);
             context.stroke();
+
             context.beginPath();
             context.strokeStyle = 'blue';
-            context.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+            context.arc(this.x, this.y + 10, this.width / 2.5, 0, Math.PI * 2);
             context.stroke();
+
             context.drawImage(
                   this.image,
                   Math.floor(this.frameX / this.staggerFrame) % this.spriteColumns * this.spriteWidth,
@@ -73,23 +164,26 @@ window.addEventListener('load', function () {
         update(input, enemies) {
             // collision detection
             enemies.forEach(enemy => {
-                const dx = enemy.x - this.x;
-                const dy = enemy.y - this.y;
+                const dx = (enemy.x - 10) - this.x;
+                const dy = enemy.y - (this.y + 10);
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < enemy.width / 2 + this.width / 2) {
+                if (distance < (enemy.width / 2.3 + this.width / 2.5)) {
                   gameOver = true;   
                 }
             });
             this.frameX ++;
-            if (input.keys.indexOf('ArrowRight') > -1) {
+            if ((input.keys.indexOf('ArrowRight') > -1) || (input.keys.indexOf('TouchRight') > -1)) {
                 this.speed = 5;
-            } else if (input.keys.indexOf('ArrowLeft') > -1) {
+            } else if ((input.keys.indexOf('ArrowLeft') > -1) || (input.keys.indexOf('TouchLeft') > -1)) {
                 this.speed = -5;
-            } else if (input.keys.indexOf('ArrowUp') > -1 && this.onGround()) {
-                this.vy -= 30;
             } else {
                 this.speed = 0;
             }
+
+            if ((input.keys.indexOf('ArrowUp') > -1 || input.keys.indexOf('TouchUp') > -1) && this.onGround()) {
+                this.vy -= this.heightThreshold;
+            }
+
             this.x += this.speed;
             
             if (this.x < 0) this.x = 0;
@@ -98,6 +192,7 @@ window.addEventListener('load', function () {
             }
 
             this.y += this.vy;
+
             if(!this.onGround()) {
                 this.vy += this.weight;
                 this.frameY = 1;
@@ -139,16 +234,17 @@ window.addEventListener('load', function () {
         }
 
         draw(context) {
-            context.strokeStyle = 'white';
-            context.strokeRect(this.x, this.y, this.width, this.height);
+            // context.strokeStyle = 'white';
+            // context.strokeRect(this.x, this.y, this.width, this.height);
 
             context.beginPath();
-            context.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+            context.strokeStyle = 'white';
+            context.arc(this.x + this.width / 2 - 10, this.y + this.height / 2, this.width / 2.3, 0, Math.PI * 2);
             context.stroke();
 
             context.beginPath();
             context.strokeStyle = 'blue';
-            context.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+            context.arc(this.x - 10, this.y, this.width / 2.3, 0, Math.PI * 2);
             context.stroke();
             context.drawImage(
                 this.image, 
@@ -227,6 +323,7 @@ window.addEventListener('load', function () {
     }
 
     function displayStatusText(context){
+        context.textAlign = 'left'
         context.font = '25px Helvetica';
         context.fillStyle = 'black';
         context.fillText('Score: ' + score, 20, 60);
@@ -240,6 +337,7 @@ window.addEventListener('load', function () {
             context.fillText('Game Over, Try Again!', canvas.width / 2, canvas.height / 2 - 20);
             context.fillStyle = 'white';
             context.fillText('Game Over, Try Again!', canvas.width / 2, canvas.height / 2 - 18);
+            restartBtn.style.display = 'block';
         }
     }
 
