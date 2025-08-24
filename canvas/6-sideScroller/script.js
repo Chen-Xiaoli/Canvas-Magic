@@ -294,7 +294,7 @@ window.addEventListener('load', function () {
             this.width = 2400;
             this.height = 720;
 
-            this.speed = 5;
+            this.speed = 3;
         }
 
         draw(context) {
@@ -354,7 +354,7 @@ window.addEventListener('load', function () {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         bg.draw(ctx);
-        // bg.update();
+        bg.update();
         player.draw(ctx);
         player.update(input, enemies);
         handleEnemies(deltaTime);
