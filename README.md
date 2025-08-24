@@ -26,3 +26,6 @@ Flying creature implemented with different animate path.
 With Parallax backgound, sprite animation, keyboard input handler and circle collision detection to implement a simple game.
 <img src="canvas/6-sideScroller/result.png" width="800" height="800" />
 
+[updated] Support mobile mode, full screen and optimize collision detection.
+<img src="canvas/6-sideScroller/result2.png" width="800" height="800" />
+
