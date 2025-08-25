@@ -31,3 +31,5 @@ With Parallax backgound, sprite animation, keyboard input handler and circle col
 [updated] Support mobile mode, full screen and optimize collision detection.
 <img src="canvas/6-sideScroller/result2.png" width="800" height="800" />
 
+[updated] code refactor for state management, use ArrowUp, ArrowDown, ArrowRight, and ArrowLeft to see the animation.
+<img src="canvas/7-sideScrolller-stateManagement/result.png" width="800" height="800" />
