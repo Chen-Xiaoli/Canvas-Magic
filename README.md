@@ -34,3 +34,7 @@ With Parallax backgound, sprite animation, keyboard input handler and circle col
 ## 7 - Game Tutorials 1 - Wolf Escape - code refactor for state management
 code refactor for state management, use ArrowUp, ArrowDown, ArrowRight, and ArrowLeft to see the animation.
 <img src="canvas/7-sideScrolller-stateManagement/result.png" width="800" height="800" />
+
+## 7 - Draw Weather Forecast 
+Use canvas to dra weather forecast, when to use moveTo and lineTo, how to scale the image is the important.
+<img src="canvas/8-weather-forecast/result.png" width="800" height="800" />
